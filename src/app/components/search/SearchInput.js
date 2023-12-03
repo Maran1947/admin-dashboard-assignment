@@ -1,7 +1,5 @@
 import { FormControl, IconButton, InputAdornment, OutlinedInput, Stack } from "@mui/material";
-import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
-import { Button } from "@mui/base";
 
 export default function SearchInput(props) {
 

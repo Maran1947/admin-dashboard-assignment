@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
@@ -13,7 +12,6 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
 import axios from 'axios';
 import { Button, Pagination, Stack, TextField } from '@mui/material';
 import { CloseOutlined, DeleteOutlineOutlined, Done, EditOutlined } from '@mui/icons-material';
@@ -21,12 +19,6 @@ import { CloseOutlined, DeleteOutlineOutlined, Done, EditOutlined } from '@mui/i
 const GET_USERS_ENDPOINT = 'https://geektrust.s3-ap-southeast-1.amazonaws.com/adminui-problem/members.json';
 
 const headCells = [
-    {
-        id: 'id',
-        numeric: false,
-        disablePadding: true,
-        label: 'ID',
-    },
     {
         id: 'name',
         numeric: false,
@@ -73,24 +65,20 @@ function EnhancedTableHead(props) {
                         }}
                     />
                 </TableCell>
-                {headCells.map((headCell) => (
-                    <TableCell
-                        key={headCell.id}
-                        align={'left'}
-                    >
-                        {headCell.label}
-                    </TableCell>
-                ))}
+                {
+                    headCells.map((headCell) => (
+                        <TableCell
+                            key={headCell.id}
+                            align={'left'}
+                        >
+                            {headCell.label}
+                        </TableCell>
+                    ))
+                }
             </TableRow>
         </TableHead>
     );
 }
-
-EnhancedTableHead.propTypes = {
-    numSelected: PropTypes.number.isRequired,
-    onSelectAllClick: PropTypes.func.isRequired,
-    rowCount: PropTypes.number.isRequired,
-};
 
 function EnhancedTableToolbar(props) {
     const { numSelected, handleDeleteSelectedUsers } = props;
@@ -109,34 +97,38 @@ function EnhancedTableToolbar(props) {
                         }),
                     }}
                 >
-                    {numSelected > 0 && (
-                        <Typography
-                            sx={{ flex: '1 1 100%' }}
-                            color="inherit"
-                            variant="subtitle1"
-                            component="div"
-                        >
-                            {numSelected} selected
-                        </Typography>
-                    )}
-                    {numSelected > 0 && (
-                        <Button
-                            onClick={handleDeleteSelectedUsers}
-                            sx={{
-                                width: '160px',
-                                padding: '10px',
-                                background: '#f00',
-                                color: '#fff',
-                                borderRadius: 2,
-                                '&:hover': {
+                    {
+                        numSelected > 0 && (
+                            <Typography
+                                sx={{ flex: '1 1 100%' }}
+                                color="inherit"
+                                variant="subtitle1"
+                                component="div"
+                            >
+                                {numSelected} selected
+                            </Typography>
+                        )
+                    }
+                    {
+                        numSelected > 0 && (
+                            <Button
+                                onClick={handleDeleteSelectedUsers}
+                                sx={{
+                                    width: '160px',
+                                    padding: '10px',
                                     background: '#f00',
-                                    opacity: 0.8
-                                },
-                                textTransform: 'capitalize'
-                            }} >
-                            Delete Selected
-                        </Button>
-                    )}
+                                    color: '#fff',
+                                    borderRadius: 2,
+                                    '&:hover': {
+                                        background: '#f00',
+                                        opacity: 0.8
+                                    },
+                                    textTransform: 'capitalize'
+                                }} >
+                                Delete Selected
+                            </Button>
+                        )
+                    }
                 </Toolbar>
             }
         </>
@@ -144,11 +136,11 @@ function EnhancedTableToolbar(props) {
 }
 
 function TablePaginationActions(props) {
-    const { 
-        count, 
-        page, 
-        rowsPerPage, 
-        onPageChange 
+    const {
+        count,
+        page,
+        rowsPerPage,
+        onPageChange
     } = props;
 
     const handleFirstPageButtonClick = (event) => {
@@ -195,11 +187,11 @@ function TablePaginationActions(props) {
                     disabled={page + 1 > 1 ? false : true}
                     variant="outlined"
                 >Prev</Button>
-                <Pagination 
-                    page={page+1}
-                    count={Math.ceil(count / rowsPerPage)} 
+                <Pagination
+                    page={page + 1}
+                    count={Math.ceil(count / rowsPerPage)}
                     onChange={handleAnyPageButtonClick}
-                    variant="outlined" 
+                    variant="outlined"
                     shape="rounded"
                     hideNextButton
                     hidePrevButton />
@@ -230,7 +222,6 @@ function TablePaginationActions(props) {
 
 export default function UsersTable({
     searchValue,
-    setSearchValue,
     isFilter,
     setIsFilter
 }) {
@@ -338,7 +329,6 @@ export default function UsersTable({
     }
 
     const handleChangeUserInfo = (e) => {
-        console.log(e.target.name, e.target.value);
         setEditUser((user) => {
             return {
                 ...user,
@@ -457,13 +447,6 @@ export default function UsersTable({
                                                             id={labelId}
                                                             scope="row"
                                                         >
-                                                            {row.id}
-                                                        </TableCell>
-                                                        <TableCell
-                                                            component="th"
-                                                            id={labelId}
-                                                            scope="row"
-                                                        >
                                                             <TextField
                                                                 defaultValue={row.name}
                                                                 onChange={handleChangeUserInfo}
@@ -542,13 +525,6 @@ export default function UsersTable({
                                                                     'aria-labelledby': labelId,
                                                                 }}
                                                             />
-                                                        </TableCell>
-                                                        <TableCell
-                                                            component="th"
-                                                            id={labelId}
-                                                            scope="row"
-                                                        >
-                                                            {row.id}
                                                         </TableCell>
                                                         <TableCell
                                                             component="th"
