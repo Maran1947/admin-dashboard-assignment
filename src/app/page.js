@@ -1,95 +1,155 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+'use client'
 
-export default function Home() {
+import { useState } from 'react';
+import PropTypes from 'prop-types';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import CssBaseline from '@mui/material/CssBaseline';
+import Divider from '@mui/material/Divider';
+import Drawer from '@mui/material/Drawer';
+import IconButton from '@mui/material/IconButton';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import GroupIcon from '@mui/icons-material/Group';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import MenuOpenIcon from '@mui/icons-material/MenuOpen';
+import MenuIcon from '@mui/icons-material/Menu';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import { Stack } from '@mui/material';
+import SearchInput from './components/search/SearchInput';
+import UsersTable from './components/table/UsersTable';
+
+const drawerWidth = 200;
+
+function AdminDashboard(props) {
+  const { window } = props;
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
+  const [isFilter, setIsFilter] = useState(false);
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
+  const drawer = (
+    <div>
+      <List sx={{
+          background: '#088397',
+          color: '#fff'
+        }} >
+        <ListItem key={'Admin'}>
+          <Stack 
+            sx={{ 
+              width: '100%'
+             }}
+            direction={'row'}
+            alignItems={'center'}
+            justifyContent={'space-around'} >
+            <Typography sx={{
+              fontSize: '1.5rem'
+            }} >Admin</Typography>
+            <MenuOpenIcon />
+          </Stack>
+        </ListItem>
+      </List>
+      <Divider />
+      <List>
+        <ListItem key={'Users'}>
+          <ListItemButton>
+            <ListItemIcon>
+              <GroupIcon />
+            </ListItemIcon>
+            <ListItemText primary={'Users'} />
+          </ListItemButton>
+        </ListItem>
+      </List>
+    </div>
+  );
+
+  const container = window !== undefined ? () => window().document.body : undefined;
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <Box sx={{ display: 'flex' }}>
+      <CssBaseline />
+      <AppBar
+        position="fixed"
+        sx={{
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          ml: { sm: `${drawerWidth}px` },
+          background: '#fff',
+          color: '#000'
+        }}
+      >
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            sx={{ mr: 2, display: { sm: 'none' } }}
           >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" noWrap component="div">
+            Users
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <Box
+        component="nav"
+        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+        aria-label="mailbox folders"
+      >
+        <Drawer
+          container={container}
+          variant="temporary"
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          ModalProps={{
+            keepMounted: true, // Better open performance on mobile.
+          }}
+          sx={{
+            display: { xs: 'block', sm: 'none' },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+          }}
         >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
+          {drawer}
+        </Drawer>
+        <Drawer
+          variant="permanent"
+          sx={{
+            display: { xs: 'none', sm: 'block' },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+          }}
+          open
         >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+          {drawer}
+        </Drawer>
+      </Box>
+      <Box
+        component="main"
+        sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
+      >
+        <Toolbar />
+        
+        <Box>
+            <SearchInput 
+              searchValue={searchValue} 
+              setSearchValue={setSearchValue}
+              setIsFilter={setIsFilter} />
+            <UsersTable 
+              searchValue={searchValue}
+              setSearchValue={setSearchValue}
+              isFilter={isFilter}
+              setIsFilter={setIsFilter} />
+        </Box>
+      </Box>
+    </Box>
+  );
 }
+
+export default AdminDashboard;
